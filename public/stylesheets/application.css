@@ -1,237 +1,6 @@
-/** Top Level Layout **/
-
-#application{
-  width:955px;
-  text-align: left;
-  margin: 0 auto;
-}
-
-#footer {
-  background:black;
-  height: 100px;
-}
-
-#footer .body {
-  width:955px;
-  text-align: left;
-  margin: 0 auto;
-  color: white;
-  font-size: 11px;
-}
-
-#footer .body a {
-  color: pink;
-}
-
-#footer #logo {
-  float:left;
-  height: 60px;
-  text-align:center;
-  padding: 40px 20px 0 14px;
-  font-size: 30px;
-}
-
-#footer ul {
-  float: left;
-  margin-top: 30px;
-  margin-left: 20px;
-}
-
-#footer .credit {
-  float: right;
-  padding-top: 14px;
-  padding-right: 40px;
-}
-
-#application_nav,
-#application_body,
-#application_footer {
-  clear:both;
-}
-
-#application_header,
-#application_nav {
-  /** brown **/ /** background: #663300; **/
-  /** green **/ /** background: #99CC00; **/
-  /** grey **/  /** background: #BBB; **/
-  /** darkgrey **/  background: dimgray; 
-}
-
-#application_header,
-#application_nav,
-#application_header a {
-  color: white;
-}
-
-#application_footer,
-#application_footer a {
-  color: #555;
-}
-
-#application_body {
-  background: white;
-  padding: 26px;
-}
-
-#application_body {
-  /** background: url('../images/body_bg.png') repeat-y; **/
-}
-
-#application_footer {
-  background: url('../images/footer_bg.png') no-repeat;
-  font-style: italic;
-  padding: 14px 14px 26px 14px;
-  clear: both;
-}
-
-/** Page Header **/
-#header {
-  height: 24px;
-  padding: 0px 4px 0px 4px;
-  text-align: center;
-  margin-top: 8px;
-}
-
-#user_status {
-  padding-top: 6px;
-  float:right;
-}
-
-#user_status,
-#user_status a {
-  color: #555;
-}
-
-#user_status .log_out {
-  padding-left: 10px;
-}
-
-#notice {
-  background: lightcyan;
-  color: #555;
-  padding: 4px;
-}
-
-/** Application Header **/
-
-#application_header {
-  padding: 14px;
-}
-#application_header h2 {
-  font-size: 20px;
-}
-
-/** Application Navigation **/
-ul.tabs {
-  float:right;
-  margin: 12px 12px 0 0;
-}
-
-ul.tabs li {
-  float:left;
-  font-size: 14px;
-  padding: 6px 18px 10px 18px;
-  color: white;
-}
-
-ul.tabs li a {
-  color: white;
-}
-
-ul.tabs li.selected,
-ul.tabs li.selected a {
-  background: white;
-  color: #555;
-}
-
-
-.list_controls, .list_controls td {
-  border: 1px solid tan;
-  padding: 3px;
-}
-
-.list_status, .instructions {
-  font-style: italic;
-}
-
-table.visits {
-  width: 100%;
-  table-layout:fixed;
-}
-
-tr.even, li.even { background: #ffffff; }
-tr.odd, li.odd  { background: lightcyan; }
-
-td.note {
-  font-style: italic;
-}
-
-td.time {
-  text-align: right;
-}
-
-div.section {
-  padding: 10px 0 10px 10px;
-  clear: both;
-}
-
-div.column {
-  width: 420px;
-  float: left;
-}
-
-div.section div.left,
-div.left div.section {
-  margin-right: 40px;
-}
-
-.paginating_links {
-  float: left;
-}
-
-.export {
-  float: right;
-}
-
-.content .warn {
-  border: 1px solid orange;
-  padding: 3px;
-}
-
-/** organizations/index **/
-
-#home_login {
-  background: lightyellow;
-  border: 1px solid tan;
-  padding: 14px;
-}
-
-/** visits/day **/
-
-#sign_in {
-  width: 400px;
-}
-
-#sign_in .form {
-  background: lightyellow;
-  border: 1px solid tan;
-  padding: 14px;
-}
-
-#sign_in #person_full_name{
-  width: 360px;
-  font-size: 14px;
-}
-
-/** Base HTML Styling **/
-
-a {
-  color: #0088eb;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+body {
+  margin:0;
+  padding:0;
 }
 
 body, legend, select, input, textarea, th, td {
@@ -242,19 +11,88 @@ body, legend, select, input, textarea, th, td {
   color: #555;
 }
 
-body {
-  /** brown **/ /** background: #996633; **/
-  /** green **/ /** background: #669900; **/
-  /** grey **/  background: #EEEEEE;
-  text-align:center;
+.container {
+  display: grid;
+  grid-template-columns: auto 478px 478px auto;
+  grid-template-rows: 32px 44px auto 56px 100px;
+  grid-template-areas:
+    "l-gutter header header r-gutter"
+    "l-gutter application-header application-header r-gutter"
+    "l-gutter l-content r-content r-gutter"
+    "l-gutter application-footer application-footer r-gutter"
+    "footer footer footer footer";
 }
 
-#application_body h1 {
+.header {
+  grid-area: header;
+  background: #eee;
+}
+
+.application-nav {}
+
+.application-header {
+  grid-area: application-header;
+  background: dimgrey;
+  color: white;
+}
+
+.l-content {
+  grid-area: l-content;
+  padding: 26px;
+}
+
+.r-content {
+  grid-area: r-content;
+  padding: 26px;
+}
+
+.application-footer {
+  grid-area: application-footer;
+  background: #eee;
+  font-style: italic;
+  padding: 14px 14px 26px 14px;
+}
+
+.footer {
+  grid-area: footer;
+  background: black;
+  color: white;
+}
+
+.l-gutter {
+  grid-area: l-gutter;
+  background: #eee;
+}
+
+.r-gutter {
+  grid-area: r-gutter;
+  background: #eee;
+}
+
+a {
+  color: #0088eb;
+}
+
+#home_login {
+  background: lightyellow;
+  border: 1px solid tan;
+  padding: 14px;
+}
+
+div.section {
+  padding: 10px 0 10px 10px;
+}
+
+.l-content p, .r-content p {
+  padding: 3px 0 3px 0;
+}
+
+.l-content h1, .r-content h1 {
   font-size: 24px;
   padding: 0 0 12px 0;
 }
 
-#application_body h2 {
+.l-content h2, .r-content h2 {
   font-size: 18px;
   padding: 0 10px 10px 0;
 }
@@ -262,18 +100,6 @@ body {
 #application_body h3 {
   font-size: 14px;
   margin: 14px 0 8px 0;
-}
-
-.content p {
-  padding: 3px 0 3px 0;
-}
-
-ul.content {
-  padding: 3px 3px 3px 20px;
-}
-
-ul.content li {
-  list-style-type: disc;
 }
 
 table {
@@ -293,42 +119,13 @@ th, td {
   padding: 6px 4px 6px 4px;
 }
 
-/** CalendarDateSelect style overrides**/
+tr.even, li.even { background: #ffffff; }
+tr.odd, li.odd  { background: lightcyan; }
 
-.calendar_date_select {
-  width: 180px;
-}
-.calendar_date_select .cds_header a {
-  width: 18px;
+td.note {
+  font-style: italic;
 }
 
-.calendar_date_select td,
-.calendar_date_select th {
-  padding: 2px;
-}
-
-.calendar_date_select select {
-  font-size: 12px;
-}
-
-.calendar_date_select .cds_buttons {
-  padding: 2px;
-}
-
-.calendar_date_select .cds_buttons a {
-  font-size: 10px;
-}
-
-.calendar_date_select .cds_header select.month {
-  width: 80px;
-}
-
-/** Rails core styles **/
-
-div.uploadStatus {
-  margin: 5px;
-}
-
-div.progressBar {
-  margin: 5px;
+td.time {
+  text-align: right;
 }

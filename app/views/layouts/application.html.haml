@@ -1,6 +1,7 @@
 %html
   %head
     %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=utf-8'}
+    %meta{'name' => 'viewport', :content => 'width=device-width'}
     -if @title #defined already
     -elsif @person && !@person.new_record?
       -@title = @person.full_name
@@ -18,8 +19,8 @@
     = csrf_meta_tag
     = yield :head
   %body
-    %div#application
-      %div#header
+    %div#container{:class => 'container'}
+      %div#header{:class => 'header'}
         %div#user_status
           -if logged_in?
             %span.greeting
@@ -28,11 +29,17 @@
             %span.log_out
               = link_to 'Log Out', session_path, :method => :delete
           -else
-            %span.log_in 
+            %span.log_in
               =link_to 'Log In', new_session_path
         -if flash[:notice]
           %span#notice= flash[:notice]
-      %div#application_nav
+
+      %div#application_header{:class => 'application-header'}
+        -if @organization && !@organization.new_record?
+          %h2= link_to @organization.name, @organization
+        -else
+          %h2 Welcome to #{link_to 'Freehub', root_path}
+        %div#application_nav
         %ul.tabs
           -if @organization && !@organization.new_record?
             = tab_item('Home', organization_path(@organization))
@@ -44,27 +51,95 @@
             =tab_item('Home', root_path)
             -if logged_in? && !current_user.organization.nil?
               = tab_item(current_user.organization.name, organization_path(current_user.organization))
-      %div#application_header
-        -if @organization && !@organization.new_record?
-          %h2= link_to @organization.name, @organization
-        -else
-          %h2 Welcome to #{link_to 'Freehub', root_path}
-      %div.content#application_body
-        = yield
-        %div{:style => 'clear:both;'}
+
+      %div{:class => 'l-content'}
+        %div.section
+          %h2 About Freehub
+          %p
+            Freehub is a system developed by the
+            =link_to "San Francisco Bike Kitchen", "http://www.bikekitchen.org"
+            and shared with other community bike shops to manage members and track patron visits.
+          %p In order to keep Freehub easy to use and understand we strive to keep it simple and focused.
+          %p Freehub is:
+          %ul.content
+            %li A database of members and the services they have access to
+            %li A sign in system for use at the front desk of the shop
+            %li A reporting tool for looking at shop use, membership status,...
+          %p Freehub is <b>not</b>:
+          %ul.content
+            %li A broadcast emailer - Freehub will not send emails to your members or patrons
+            %li An accounting tool - we do not track money in Freehub
+            %li An inventory tool - we do not track tools or parts in Freehub
+            %li A point of sale system - we do not track shop sales in Freehub
+          %p= "For more information please see the #{link_to "project wiki", "https://github.com/asalant/freehub/wiki"}."
+        -if !logged_in?
+        %div.section
+          %h2 Sign Up
+          %p= "#{link_to 'Sign up now', new_organization_path} to try this free service."
+          %p You are welcome to try Freehub for your organization. You can export your data at any time if you want to stop using Freehub.
+          %p Keep in mind that we are in a beta phase and can not guarantee availability or stability.
+        %div.section
+          %h2 Quick Demo
+          %p= "This #{link_to 'short movie', '/demo/summary.html'} demonstrates the basic features of Freehub."
+          %p= link_to image_tag("/demo/demo.jpg", :style => "border: 1px solid lightgrey;"), '/demo/summary.html'
+      %div{:class => 'r-content'}
+        -if !logged_in?
+        %div.section
+          %h2 Log In
+          -form_tag session_path, :id => 'home_login' do
+            %ul
+              =labeled_input 'Login', :for => :login do
+                -capture do
+                  =text_field_tag 'login'
+              =labeled_input 'Password', :for => :password do
+                -capture do
+                  =password_field_tag 'password'
+              %li
+                =check_box_tag('remember_me')
+                %label.choice{:for => 'remember_me'} Remember me
+              %li
+                =submit_tag 'Log In'
+        %div.section
+          %h2 Organizations
+          %p These organization have signed up to use Freehub and are actively using it.
+          %table{:width => "100%"}
+            %tr
+              %th
+            -for organization in @organizations
+              -if @organizations.length > 4 && (!organization.active? || organization.visits_count < 10)
+                -next
+              %tr{:class => cycle('odd','even')}
+                %td
+                  %b= organization.name
+                  %br
+                  = organization.location
+                %td{:style => 'width: 200px'}
+                  -if !organization.last_visit.nil?
+                    = "last visit #{datetime_long(organization.last_visit.arrived_at)}"
+                  %br
+                  -if organization.member_count > 9
+                    = "#{organization.member_count} members"
+                -if permit? 'admin'
+                  %td= link_to 'Remove', organization, :confirm => 'Are you sure?', :method => :delete
       %div#application_footer
         = "Times shown are #{Time.zone.name} timezone."
-    %div#footer
-      %div.body
-        %div#logo 
-          = link_to 'Freehub', root_path
-        %ul
-          %li Get #{link_to "help or send feedback", "http://wiki.github.com/asalant/freehub/freehub-support"}
-          %li Check the #{link_to 'project documentation', 'http://wiki.github.com/asalant/freehub/'}
-        %ul
-          %li Thanks to #{link_to 'EngineYard', 'http://www.engineyard.com'} for hosting
-        %div.credit 
-          =image_tag("ey-logo.gif")
+      %div#footer{:class => 'footer'}
+        %div.body
+          %div#logo
+        %div#logo
+          %div#logo
+            = link_to 'Freehub', root_path
+          %ul
+            %li Get #{link_to "help or send feedback", "http://wiki.github.com/asalant/freehub/freehub-support"}
+            %li Check the #{link_to 'project documentation', 'http://wiki.github.com/asalant/freehub/'}
+          %ul
+            %li Thanks to #{link_to 'EngineYard', 'http://www.engineyard.com'} for hosting
+          %div.credit
+        %div.credit
+          %div.credit
+            =image_tag("ey-logo.gif")
+      %div{:class => 'l-gutter'}
+      %div{:class => 'r-gutter'}
     :javascript
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-16200053-1']);
